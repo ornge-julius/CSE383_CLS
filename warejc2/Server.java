@@ -21,14 +21,13 @@ public class Server{
 
 	//starting server
 	public static void main(String a[]){
-
 		int portnum = 0;
 		
 		try{
 			portnum = Integer.parseInt(a[0]);
 
 			} catch (Exception err) {
-				System.out.println("Could not parse arguement");
+				System.err.println("Could not parse arguement");
 				System.exit(-1);
 			}
 
@@ -36,7 +35,7 @@ public class Server{
 			new Server(portnum).Main();
 			
 			} catch (IOException err) {
-				System.out.println("Port in use");
+				System.err.println("Port in use");
 				System.exit(-1);
 			}
 
@@ -57,6 +56,8 @@ public class Server{
 				//receive packet/message/data
 				byte b[] = new byte[1024];
 				DatagramPacket pkt = new DatagramPacket(b,b.length);
+				sock.receive(pkt);
+
 				ByteArrayInputStream bis = new ByteArrayInputStream (b);
 				DataInputStream dis = new DataInputStream (bis);
 				String newmsg = dis.readUTF();
