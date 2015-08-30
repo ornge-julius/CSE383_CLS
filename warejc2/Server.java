@@ -17,6 +17,7 @@ public class Server{
 
 	DatagramSocket sock;
 	DatagramPacket pkt;
+	SocketAddress sendAddr;
 	int portnum;
 
 	//starting server
@@ -54,31 +55,24 @@ public class Server{
 		while(true){
 			try{
 				//receive packet/message/data
-				byte b[] = new byte[1024];
-				DatagramPacket pkt = new DatagramPacket(b,b.length);
-				sock.receive(pkt);
+				
 
-				ByteArrayInputStream bis = new ByteArrayInputStream (b);
-				DataInputStream dis = new DataInputStream (bis);
-				String newmsg = dis.readUTF();
-				System.out.println("Packet received from: " + pkt.getSocketAddress());
-				System.out.println("Msg: " + newmsg);
-				if(newmsg == "HELLO"){
-					clients.add(pkt.getSocketAddress());
-				} else if(newmsg == "GOODBYE"){
-					clients.remove(pkt.getSocketAddress());
-				}
+				String newmsg[] = getMessage(); 
+				System.out.println("Packet received from: " + sendAddr);
+				System.out.println("Msg: " + newmsg[0]);
+				if(newmsg[0] == "HELLO"){
+					clients.add(sendAddr);
+					System.out.println(newmsg[0]);
+					sendMessage("HELLO-RESPONSE","", sendAddr);	
+				} else if(newmsg[0] == "GOODBYE"){
+					clients.remove(sendAddr);
+					sendMessage("GOODBYE-RESPONSE", "", sendAddr);
+				} else {
 				
 				// echo/send message to client
-				ByteArrayOutputStream bos = new ByteArrayOutputStream();
-				DataOutputStream dos = new DataOutputStream(bos);
-				dos.writeUTF(newmsg);
-				byte bout[] = bos.toByteArray();
-	
+				}
 				for(int i = 0; i < clients.size(); i++){
-				DatagramPacket reply = new DatagramPacket(bout, bout.length, clients.get(i));
-				sock.send(reply);
-	
+					sendMessage(newmsg[0], "", clients.get(i));	
 				}
 			} catch (IOException err){
 				System.out.println("Error" + err);
@@ -88,4 +82,32 @@ public class Server{
 		}
 
 	}
+
+	public void sendMessage(String msg,String msg1, SocketAddress addr)  throws IOException {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		DataOutputStream dos = new DataOutputStream(bos);
+		dos.writeUTF(msg);
+		dos.writeUTF(msg1);
+		byte byteArray[] = bos.toByteArray();
+		SocketAddress sendto = addr;
+		DatagramPacket sendMsg = new DatagramPacket(byteArray,byteArray.length, sendto);
+		sock.send(sendMsg);
+	}
+
+
+	public String[] getMessage() throws IOException {
+		String msg[] = new String[2];
+		byte b[] = new byte[1024];
+		DatagramPacket pkt = new DatagramPacket(b,b.length);
+		sock.receive(pkt);
+		sendAddr = pkt.getSocketAddress();
+		ByteArrayInputStream bis= new ByteArrayInputStream(b);
+		DataInputStream dis = new DataInputStream(bis);
+		msg[0] = dis.readUTF();
+		msg[1] = dis.readUTF();
+		return msg;
+	}
+
+
+
 }
