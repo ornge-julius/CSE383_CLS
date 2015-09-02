@@ -13,11 +13,13 @@ package warejc2;
 import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
+
 public class Server{
 
 	DatagramSocket sock;
 	DatagramPacket pkt;
 	SocketAddress sendAddr;
+	Log log;
 	int portnum;
 
 	//starting server
@@ -45,25 +47,31 @@ public class Server{
 	public Server (int portnum) throws IOException {
 		this.portnum = portnum;
 		sock = new DatagramSocket(portnum);
+		log = new Log("server.log");
 
 	}
 	public void Main(){
 		String msg = "";
 		System.out.println("Server Starting...");
+		log.log("Server Starting...");
 		ArrayList<SocketAddress> clients = new ArrayList<SocketAddress>();
 		//loop forever
 		while(true){
 			try{
 				//receive packet/message/data
 				
-
+				log.log("Waiting for packet..");
 				String newmsg[] = getMessage(); 
 				System.out.println("Packet received from: " + sendAddr);
-				System.out.println("Msg: " + newmsg[0]);
+				log.log("Packet received from: " + sendAddr);
+				System.out.println("Msg: " + newmsg[1]);
+				log.log("Msg: " + newmsg[1]);
 				if(newmsg[0].equals("HELLO")){
 					clients.add(sendAddr);
+					log.log("Client " + sendAddr + " connected");
 					sendMessage("HELLO-RESPONSE","", sendAddr);	
 				} else if(newmsg[0].equals("GOODBYE")){
+					log.log("Client " + sendAddr + " left");
 					clients.remove(sendAddr);
 					sendMessage("GOODBYE-RESPONSE", "", sendAddr);
 				} else {
@@ -71,7 +79,7 @@ public class Server{
 				// echo/send message to client
 				}
 				for(int i = 0; i < clients.size(); i++){
-					sendMessage(newmsg[0], "", clients.get(i));	
+					sendMessage(newmsg[0], newmsg[1], clients.get(i));	
 				}
 			} catch (IOException err){
 				System.out.println("Error" + err);
