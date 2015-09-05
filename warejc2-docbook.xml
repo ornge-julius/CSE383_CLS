@@ -1,0 +1,21 @@
+<!DOCTYPE note PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+				"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"
+				[
+<!ELEMENT note(author, heading, body)>
+<!ELEMENT author (#PCDATA)>
+<!ELEMENT heading (#PCDATA)>
+<!ELEMENT p (#PCDATA)>
+]>
+
+<note>
+<author>Julius Ware</author>
+<heading>Homework 2</heading>
+
+<p>	XML is used for data exchange. It can be used in libraries, banking, logistic, and ordering. The protocols for xml are very specific and usually not portable. XML does not actually DO anything, it is just a way to describing different data that will be send in a file of some sort. It is not a replacement for HTML but more of a complement. In html you may need to display dynamic data and updating the html can be a hassel everytime thte data changes. With xml you can store the data in a seperate file and update it with some javascript code. This ensures that the html is used strictly for diplaying the data.</p>
+
+<p>	XML is also used to provide a universal format for data. In the world of technology and data exchange often computers, machines, and databases store data in incompatible formats. XML is stored in plain text formatting. This provides a way to safely store data regardless of hardware and software types and constraints.</p>
+
+<p>XML also makes your data more available. Applications access your data not just from HTML pages but also from xml resources. With xml your data is available to all machines and available to read in any format.</p>
+
+</note>
+
