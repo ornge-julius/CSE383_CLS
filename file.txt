@@ -1,0 +1,20 @@
+Hello, this is the first message that you should be able to decrypt.  
+
+Upon completion of reading this message follow these steps.
+
+1) create another text document that contains the following.
+a) Your Name
+b) Your section
+
+2) Encrypt this document using openssl making sure to ascii armor it. Use the following settings.
+
+key: 00112233445566778899AABBCCDDEEFF
+IV: FFEEDDCCBBAA99887766554433221100
+base64 the result
+use aes 128 cbc
+
+Paste the resulting encrypted file into the canvas assignment tab for "AES"
+
+Good Luck.
+
+Dr. Campbell
